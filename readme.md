@@ -99,7 +99,7 @@ terraform apply
 terraform destroy
 ```
 
-* The output compares the infrastructure defined in the *.tf files against the actual azure infrastructure and will indicate how changes will impact that system.
+* The output compares the infrastructure defined in the *.tf files against the actual cloud infrastructure and will indicate how changes will impact that system.
 * Changing the Cloud infrastructure required running.
 * Removing the infrastructure created via the destroy option. https://www.terraform.io/docs/commands/destroy.html
 
@@ -108,12 +108,34 @@ terraform destroy
 
 # 5. Walkthrough - Azure
 
-The following example is a basic set of .net components that would be required for creating a basic .net microservice using queues, file storage and a SQL database for a development environment.
+The following example is a basic set of .net components that would be required for creating a basic .net microservice using queues, file storage and a SQL database for a development environment. Some of these objects may already exist in Azure, so you can use them to start the process.
+
+## Azure - Find Subscription details
+* Open Visual Code (Reboot if extensions were installed)
+* Navigate to Terminal -> New Terminal -> Terminal Tab 
+* Enter the following command one at a time.
+
+```powershell
+# Web browser will open and navigate through the Azure Portal authentication process
+az login
+
+# You can then view all the azure subscriptions you user/password combo can access.
+az account list
+
+# Replace SUBSCRIPTION_ID in the powershell bellow, with the GUID from the previous step.
+az account set -s SUBSCRIPTION_ID
+az account show
+```
 
 
 # 6. Walkthrough - Aws
 
+TBA
+
 # 7. Conclusion
 
+TBA
+
 ## Working around Terraform limitations
-The terraform providers may not impliment the complete range of API's available in each of the cloud providers. In Azure case, you can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
+
+The terraform providers may not impliment the complete range of API's available in each of the cloud providers. You can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
