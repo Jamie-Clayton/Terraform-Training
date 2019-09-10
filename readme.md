@@ -303,6 +303,7 @@ TBA
 4. Continuously test, integrate, and deploy
 5. Make your infrastructure code modular
 6. Make your infrastructure immutable (cattle not pets)
+7. Feed the results through a governance pipeline
 
 ## Working around Terraform limitations
 
