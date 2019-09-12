@@ -1,25 +1,27 @@
-# Windows Configuration
+# Terraform Windows Configuration and Introduction
 
 ## Objectives
 
 1. Setup windows for Terraform infrastructure.
-2. Determine the process/lifecycle for Terraform.                     
-3. Evaluate the effort required.                                       
-4. Walkthrough - Azure.
-5. Walkthrough - Aws.
-6. Conclusion. 
+2. Determine the process / life cycle for Terraform.
+3. Evaluate the effort required.
+4. Walk-through - Azure.
+5. Walk-through - Aws.
+6. Conclusion.
 
-# 1. Setup
-## Install Terraform software
-Install chocolatey powershell package installer. https://chocolatey.org/install. 
+## 1. Setup
+
+### Install Terraform software
+
+Install chocolatey powershell package installer. [Chocolatey Package Management](https://chocolatey.org/)
 
 ```powershell
-# ** Open powershell as admininistrator
+# ** Open powershell as administrator
 
 # Install Chocolatey package manager
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-# ** Reboot powershell as admininistrator
+# ** Reboot powershell as administrator
 
 # Install Terraform editing software
 choco install vscode
@@ -29,7 +31,7 @@ choco install Terraform
 choco install azure-cli
 choco install awscli
 
-# ** Reboot powershell as admininistrator
+# ** Reboot powershell as administrator
 # ** Confirm installation versions are appropriate/current
 choco -v
 Terraform -v
@@ -40,19 +42,19 @@ aws --v
 ## Upgrading Terraform software
 
 ```powershell
-# ** Open powershell as admininistrator
+# ** Open powershell as administrator
 
 # VSCode will self update (but just in case)
 choco upgrade vscode
 
 # Upgrade CLI software (periodically)
-choco upgrade Chocholatey
+choco upgrade Chocolatey
 choco upgrade Terraform
 choco upgrade azure-cli
 choco upgrade awscli
 ```
 
-# 2. Terraform lifecycle
+## 2. Terraform life cycle
 
 1. Identify the cloud object to automate.
 2. Find the matching Terraform Import command.
@@ -60,14 +62,15 @@ choco upgrade awscli
 4. Adjust the main.tf, variable.tf, output.tf etc files accordingly.
 5. Confirm the configuration.
 6. Determine if the further changes are required (Yes - GOTO step 1.)
-6. Commit configuration to repo.
+7. Commit configuration to repo.
 
-## Authoring Terraform projects
+### Authoring Terraform projects
+
 * Open Visual Code
 * Navigate -> File -> Open Folder
 * Create a new folder for your infrastructure as code files
 * Initialize the folder as a Git Repository
-* Create 3 file, that is the convention for Terraform implimentations
+* Create 3 file, that is the convention for Terraform implementations
   * main.tf
   * variables.tf
   * outputs.tf
@@ -78,13 +81,14 @@ choco upgrade awscli
 terraform init
 ```
 
-When terraform runs, it automatically imports all the *.tf files and merges them together to execute. As a result all the variable declarations must be globaly unique.
+When terraform runs, it automatically imports all the *.tf files and merges them together to execute. As a result all the variable declarations must be globally unique.
 
-# Configuration in Terraform
+### Configuration in Terraform
+
 Once the terraform.tfstate file has been created you can edit all your *.tf files and compare that against the cloud environment. Terraform will report all the changes it will make if you apply the changes to the environment.
 
 ```powershell
-# Terraform command lifecycle
+# Terraform command life cycle
 
 # Confirm the script syntax
 terraform validate
@@ -99,21 +103,20 @@ terraform apply
 terraform destroy
 ```
 
-* The output compares the infrastructure defined in the *.tf files against the actual cloud infrastructure and will indicate how changes will impact that system.
-* Changing the Cloud infrastructure required running.
-* Removing the infrastructure created via the destroy option. https://www.terraform.io/docs/commands/destroy.html
+The output compares the infrastructure defined in the *.tf files against the actual cloud infrastructure and will indicate how changes will impact that system. The terraform state files generated allow configuration drift to be detected, so manual changes to cloud environments can be monitored and appropriate action taken.
 
-# 4. Terraform Effort->Reward Tradeoff
+## 4. Terraform Effort->Reward Tradeoff
 
-TBA 
+TBA
 
-# 5. Walkthrough - Azure
+## 5. Walk-through - Azure
 
-The following example is a basic set of .net components that would be required for creating a basic .net microservice using queues, file storage and a SQL database for a development environment. Some of these objects may already exist in Azure, so you can use them to start the process.
+The following example is a basic set of .net components that would be required for creating a basic .net [Microservice](https://en.wikipedia.org/wiki/Microservices)  using queues, file storage and a SQL database for a development environment. Some of these objects may already exist in Azure, so you can use them to start the process.
 
-## Azure - Find Subscription details
+### Azure - Find Subscription details
+
 * Open Visual Code (Reboot if extensions were installed)
-* Navigate to Terminal -> New Terminal -> Terminal Tab 
+* Navigate to Terminal -> New Terminal -> Terminal Tab
 * Enter the following command one at a time.
 
 ```powershell
@@ -128,7 +131,7 @@ az account set -s SUBSCRIPTION_ID
 az account show
 ```
 
-## Azure - Existing Cloud Objects
+### Azure - Existing Cloud Objects
 
 1. Open Azure portal and identify the object to import
 2. Using the portal.azure.com Navigate to object -> Find "Export Template" sub menu -> Click on "CLI" tab.
@@ -157,7 +160,8 @@ terraform import azurerm_servicebus_namespace.queue /subscriptions/SUBSCRIPTION_
 terraform import azurerm_storage_account.storage /subscriptions/SUBSCRIPTION_ID/resourceGroups/develop-rg/providers/Microsoft.Storage/storageAccounts/developstorage
 ```
 
-### File Example - main.tf 
+### File Example - main.tf
+
 \>= 0.12
 
 ```terraform
@@ -194,7 +198,7 @@ resource "azurerm_servicebus_namespace_authorization_rule" "queuesecurity" {
   manage = true
 }
 
-# Storeage account (LowerCaseOnly)
+# Storage account (LowerCaseOnly)
 resource "azurerm_storage_account" "storage" {
   name                     = lower(join( var.Env, "storage" ))
   resource_group_name      = azurerm_resource_group.envgrp.name
@@ -229,7 +233,9 @@ resource "azurerm_storage_share" "shellShare" {
   quota                = 2
 }
 ```
+
 ### File Example - variables.tf
+
 \>= 0.12
 
 ```terraform
@@ -261,7 +267,7 @@ variable "azDefaultDevTags" {
         Commercials         = "TBA"
         CostCenter          = "CustomerAccNumber=TBA"
         Documentation       = "https://github.com/JenasysDesign/Terraform-Training"
-        Environment         = "dev",       
+        Environment         = "dev",
         Kanban              = "https://github.com/JenasysDesign/Terraform-Training/projects"
         Management          = "Terraform.azurerm",
         Solution            = "Cloud Microservices Template"
@@ -272,6 +278,7 @@ variable "azDefaultDevTags" {
 ```
 
 ### File Example - Output.tf
+
 ```Terraform
 output "StorageKey" {
     value = azurerm_storage_account.storage.primary_access_key
@@ -287,15 +294,16 @@ output "ServiceBusConnectionString" {
 
 output "FileShare-Shell" {
     value = azurerm_storage_share.shellShare.url
-} 
+}
 ```
-# 6. Walkthrough - Aws
+
+## 6. Walk-through - Aws
 
 TBA
 
-# 7. Conclusion
+## 7. Conclusion
 
->  “Infrastructure as code is an approach to managing IT infrastructure for the age of cloud, microservices and continuous delivery.” – Kief Morris, head of continuous delivery for ThoughtWorks Europe.
+> “Infrastructure as code is an approach to managing IT infrastructure for the age of cloud, Microservice and continuous delivery.” – Kief Morris, head of continuous delivery for ThoughtWorks Europe.
 
 1. Automate/Code everything
 2. Document as little as possible
@@ -305,9 +313,27 @@ TBA
 6. Make your infrastructure immutable (cattle not pets)
 7. Feed the results through a governance pipeline
 
-## Working around Terraform limitations
+### Working around Terraform limitations
 
-The terraform providers may not impliment the complete range of API's available in each of the cloud providers. You can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
+The terraform providers may not implement the complete range of API's available in each of the cloud providers. You can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
+
+### Naming
+
+Recommendations
+
+Do not use Providers name in the object names. E.g. AWS-Storage-Backups -> Storage-Backups
+Do not use Provider specific service names. E.g. EC2-WebServer-Ordering-UI -> Ordering-UI-WebServer
+Try not to use acronyms, unless they are part of you naming strategy E.g. WS -> WebServer
+Keep your naming pattern consistent.
+
+### Example
+
+Service = "SupplyChain"
+Component = "Orders"
+Environment = "UAT"
+
+E.g. IIS Server
+{var.Service}-{var.Component}-{var.Environment}-WebServer
 
 ## Further Reading
 
