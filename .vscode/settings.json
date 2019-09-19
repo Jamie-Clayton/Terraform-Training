@@ -1,10 +1,12 @@
 {
     "cSpell.words": [
+        "CICD",
         "Hashicorp",
         "RAGRS",
         "awscli",
         "azurerm",
         "choco",
+        "servicebus",
         "tfstate"
     ]
 }

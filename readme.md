@@ -107,7 +107,41 @@ The output compares the infrastructure defined in the *.tf files against the act
 
 ## 4. Terraform Effort->Reward Tradeoff
 
-TBA
+### Effort
+
+* Upfront investment
+
+  * secrets governance
+  * source control governance
+  * deployment pipelines service configuration
+  * terraform state file storage
+  * staff training (git/terraform/cli)
+
+* Component investment
+
+  * Each Object takes about 5-30 minutes to setup in terraform
+  * Portal editing or powershell CLI object creation takes up to 5 minutes to step through
+  * Execution time slightly longer with Terraform and Azure
+  * Slower initial environment configuration.
+
+* Technical Debt
+
+  * Terraform CLI and Provider CLI updates may require reviewing/testing existing files
+  * Duplication of patching effort that may be automated by providers user interfaces
+  * Infrastructure drift (manual changes conflict with file settings).
+
+### Rewards
+
+Requires multiple re-use of Terraform files (templates/modules) before the reward is greater than the effort invested in the approach.
+
+* Infrastructure as code governance model
+* Control/consistency of environments. E.g. (dev, uat, prod)
+* Versioning of infrastructure changes
+* Reduced data entry and human factors
+* Reusable patterns, via modules (Repository of infrastructure)
+* Automatic documentation
+* Naming consistency
+* Enables extensive tagging, useful for reporting, managing costs, searching
 
 ## 5. Walk-through - Azure
 
@@ -134,12 +168,11 @@ az account show
 ### Azure - Existing Cloud Objects
 
 1. Open Azure portal and identify the object to import
-2. Using the portal.azure.com Navigate to object -> Find "Export Template" sub menu -> Click on "CLI" tab.
-3. Review 
-4. Find the matching Terraform azure provider command to create the object.
-5. Create the *.tf object 
-6. Use the Terraform cli to import the object
-7. Confirm the *.tf configuration matches the imported object
+2. Find the matching Terraform azure provider command to create the object. See [Terraform Azure Documents](https://www.terraform.io/docs/providers/azurerm/) and use the **Filter** feature.
+3. Add the object reference in the  main.tf file. E.g. resource "azurerm_resource_group" "grpName" {}
+4. Use the Terraform cli to import the object (step 2 web page #import bookmark). E.g. terraform import azurerm_resource_group.group /subscriptions/SUBSCRIPTION_ID/resourceGroups/develop-rg
+5. Run the Terraform cli command to review the change. E.g. terraform plan
+6. Confirm the main.tf configuration matches the imported object (from step 5)
 
 ### Terraform Import (Existing cloud objects)
 
