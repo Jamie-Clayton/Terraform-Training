@@ -1,13 +1,15 @@
 # Terraform Windows Configuration and Introduction
 
-## Objectives
+## Table Of Contents
 
-1. Setup windows for Terraform infrastructure.
-2. Determine the process / life cycle for Terraform.
-3. Evaluate the effort required.
-4. Walk-through - Azure.
-5. Walk-through - Aws.
-6. Conclusion.
+1. Setup Terraform on Windows.
+2. Terraform life cycle.
+3. Terraform Effort versus Reward Tradeoff.
+4. Terraform Walk-through - Azure.
+5. Terraform Walk-through - Aws.
+6. Terraform Object Naming Recommendations
+7. Conclusion
+8. Further Reading
 
 ## 1. Setup
 
@@ -105,7 +107,7 @@ terraform destroy
 
 The output compares the infrastructure defined in the *.tf files against the actual cloud infrastructure and will indicate how changes will impact that system. The terraform state files generated allow configuration drift to be detected, so manual changes to cloud environments can be monitored and appropriate action taken.
 
-## 4. Terraform Effort->Reward Tradeoff
+## 3. Terraform Effort versus Reward Tradeoff
 
 ### Effort
 
@@ -143,7 +145,7 @@ Requires multiple re-use of Terraform files (templates/modules) before the rewar
 * Naming consistency
 * Enables extensive tagging, useful for reporting, managing costs, searching
 
-## 5. Walk-through - Azure
+## 4. Terraform Walk-through - Azure
 
 The following example is a basic set of .net components that would be required for creating a basic .net [Microservice](https://en.wikipedia.org/wiki/Microservices)  using queues, file storage and a SQL database for a development environment. Some of these objects may already exist in Azure, so you can use them to start the process.
 
@@ -330,29 +332,11 @@ output "FileShare-Shell" {
 }
 ```
 
-## 6. Walk-through - Aws
+## 5. Walk-through - Aws
 
 TBA
 
-## 7. Conclusion
-
-> “Infrastructure as code is an approach to managing IT infrastructure for the age of cloud, Microservice and continuous delivery.” – Kief Morris, head of continuous delivery for ThoughtWorks Europe.
-
-1. Automate/Code everything
-2. Document as little as possible
-3. Maintain with version control
-4. Continuously test, integrate, and deploy
-5. Make your infrastructure code modular
-6. Make your infrastructure immutable (cattle not pets)
-7. Feed the results through a governance pipeline
-
-### Working around Terraform limitations
-
-The terraform providers may not implement the complete range of API's available in each of the cloud providers. You can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
-
-### Naming
-
-Recommendations
+## 6. Terraform Object Naming Recommendations
 
 * **Do** Keep your naming pattern consistent.
 * **Do** consider how people will infer things from the name.
@@ -372,7 +356,23 @@ A windows IIS Web Server: *SupplyChain-Orders-UAT-WebServer*
     var.ObjectName = "{var.Service}-{var.Component}-{var.Environment}-WebServer" 
 ```
 
-## Further Reading
+## 8. Conclusion
+
+> “Infrastructure as code is an approach to managing IT infrastructure for the age of cloud, Microservice and continuous delivery.” – Kief Morris, head of continuous delivery for ThoughtWorks Europe.
+
+1. Automate/Code everything
+2. Document as little as possible
+3. Maintain with version control
+4. Continuously test, integrate, and deploy
+5. Make your infrastructure code modular
+6. Make your infrastructure immutable (cattle not pets)
+7. Feed the results through a governance pipeline
+
+### Working around Terraform limitations
+
+The terraform providers may not implement the complete range of API's available in each of the cloud providers. You can fallback to the powershell CLI commands to complete tasks. However the execution of those scripts will required the underlying terraform CICD pipeline to include the powershell scripts required.
+
+## 9. Further Reading
 
 [Wikipedia](https://en.wikipedia.org/wiki/Infrastructure_as_code)
 
