@@ -354,19 +354,23 @@ The terraform providers may not implement the complete range of API's available 
 
 Recommendations
 
-Do not use Providers name in the object names. E.g. AWS-Storage-Backups -> Storage-Backups
-Do not use Provider specific service names. E.g. EC2-WebServer-Ordering-UI -> Ordering-UI-WebServer
-Try not to use acronyms, unless they are part of you naming strategy E.g. WS -> WebServer
-Keep your naming pattern consistent.
+* **Do** Keep your naming pattern consistent.
+* **Do** consider how people will infer things from the name.
+* **Don't** use a terraform providers name in the object names. E.g. *AWS-Backup-Storage* should be *Backup-Storage*
+* **Don't** use provider specific service names. E.g. *EC2-Ordering-UI-WebServer* should be *Ordering-UI-WebServer*
+* **Don't** use acronyms, unless they are part of you naming strategy E.g. *WS* should be *WebServer*
+* **Do** use tags to provide more context for the objects.
 
-### Example
+### Naming Examples with Terraform Variables
 
-Service = "SupplyChain"
-Component = "Orders"
-Environment = "UAT"
+A windows IIS Web Server: *SupplyChain-Orders-UAT-WebServer*
 
-E.g. IIS Server
-{var.Service}-{var.Component}-{var.Environment}-WebServer
+```Terraform
+    var.Service = "SupplyChain"
+    var.Component = "Orders"
+    var.Environment = "UAT"
+    var.ObjectName = "{var.Service}-{var.Component}-{var.Environment}-WebServer" 
+```
 
 ## Further Reading
 
