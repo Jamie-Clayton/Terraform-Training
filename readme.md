@@ -2,7 +2,7 @@
 
 ## Table Of Contents
 
-1. Setup Terraform on Windows.
+1. Setup
 2. Terraform life cycle.
 3. Terraform Effort versus Reward Tradeoff.
 4. Terraform Walk-through - Azure.
@@ -13,7 +13,7 @@
 
 ## 1. Setup
 
-### Install Terraform software
+### Install Terraform software on Windows
 
 Install chocolatey powershell package installer. [Chocolatey Package Management](https://chocolatey.org/)
 
@@ -41,7 +41,7 @@ az -v
 aws --v
 ```
 
-## Upgrading Terraform software
+## Upgrading Terraform software on Windows
 
 ```powershell
 # ** Open powershell as administrator
@@ -54,6 +54,65 @@ choco upgrade Chocolatey
 choco upgrade Terraform
 choco upgrade azure-cli
 choco upgrade awscli
+```
+
+### Install Terraform software on Linux
+
+Initially I hoped to use the SnapCraft universal linux packaging solution. At the time of authoring this guide, it was not installing the current editions desired.
+
+#### Linux Snap repository
+
+```bash
+sudo snap install terraform
+
+# Confirm the edition of terraform
+terraform -v
+
+sudo snap remove terraform
+
+# Confirm Snap removed (snap directory found in $PATH)
+ls /snap/bin
+```
+
+#### Linux manual installation
+
+These are instructions from a windows software engineering perspective.
+
+```bash
+# Create terraform storage directories
+mkdir ~/Public/terraform
+cd ~/Public/terraform/
+
+# Add the installation directory to the executable $PATH
+echo $PATH
+export PATH=~/Public/terraform/:$PATH
+# Confirm the $PATH now includes terraform directory
+echo $PATH
+
+# Navigate in a browser to Terraform downloads to obtain the URL for the latest edition
+# https://www.terraform.io/downloads.html
+curl -o ~/Downloads/terraform.zip https://releases.hashicorp.com/terraform/0.12.18/terraform_0.12.18_linux_amd64.zip
+unzip -u ~/Downloads/terraform.zip -d ~/Public/terraform/
+
+# Confirm the edition of Terraform installed.
+terraform -v
+
+# Create an alias command for Terraform application
+alias tf='terraform'
+
+# Test the alias works
+tf -v
+```
+
+### Upgrading Terraform software on Linux
+
+Please update the values in the script below as needed.
+
+```bash
+# Navigate in a browser to Terraform downloads to obtain the URL for the latest edition
+# https://www.terraform.io/downloads.html
+curl -o ~/Downloads/terraform.zip https://releases.hashicorp.com/terraform/0.12.18/terraform_0.12.18_linux_amd64.zip
+unzip -u ~/Downloads/terraform.zip -d ~/Public/terraform/
 ```
 
 ## 2. Terraform life cycle
