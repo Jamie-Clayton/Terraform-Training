@@ -94,6 +94,19 @@ echo $PATH
 curl -o ~/Downloads/terraform.zip https://releases.hashicorp.com/terraform/0.12.18/terraform_0.12.18_linux_amd64.zip
 unzip -u ~/Downloads/terraform.zip -d ~/Public/terraform/
 
+# Set your profile perminantly (via Microsoft Visual Code)
+code ~/.profile
+
+# add the following lines to the end of the document
+
+export PATH=~/Public/terraform/:$PATH
+alias tf='terraform'
+
+# Save and close file in Visual Code
+
+# Load the current bash session with the profile values.
+source ~/.profile
+
 # Confirm the edition of Terraform installed.
 terraform -v
 
@@ -103,6 +116,8 @@ alias tf='terraform'
 # Test the alias works
 tf -v
 ```
+
+[Installation Video - HashiCorp](https://learn.hashicorp.com/terraform/getting-started/install)
 
 ### Upgrading Terraform software on Linux
 
