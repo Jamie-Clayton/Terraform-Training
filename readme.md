@@ -94,8 +94,14 @@ echo $PATH
 curl -o ~/Downloads/terraform.zip https://releases.hashicorp.com/terraform/0.12.18/terraform_0.12.18_linux_amd64.zip
 unzip -u ~/Downloads/terraform.zip -d ~/Public/terraform/
 
-# Set your profile perminantly (via Microsoft Visual Code)
-code ~/.profile
+# Read - https://superuser.com/a/183980
+
+# Set your terminal perminantly (via Microsoft Visual Code)
+# Select one of the following 3 options (Add/Remove # comment at start of the line)
+
+#code ~/.profile
+#code ~/.bash_profile
+code ~/.bashrc  
 
 # add the following lines to the end of the document
 
