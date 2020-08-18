@@ -32,7 +32,7 @@ choco install azure-cli -y
 choco install awscli -y
 
 # Run an updated on Terraform related components
-choco upgrade chocolatey terraform packer azure-cli awscli -y
+choco upgrade vscode chocolatey terraform packer azure-cli awscli -y
 
 # Confirm Installation editions
 choco -v
@@ -56,10 +56,8 @@ Write-Output("Review Extensions - Terraform")
 ## Upgrading Terraform software on Windows
 
 ```powershell
-# ** Open powershell as administrator
-
-# VSCode will self update (but just in case)
-choco upgrade chocolatey terraform packer azure-cli awscli -y
+# Open powershell as administrator
+choco upgrade vscode chocolatey terraform packer azure-cli awscli -y
 ```
 
 ### Install Terraform software on Linux
