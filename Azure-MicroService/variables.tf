@@ -54,12 +54,12 @@ module "resource_group_name" {
 module "storage_account_name" {
   source   = "gsoft-inc/naming/azurerm//modules/storage/storage_account"
   name     = "data"
-  prefixes = ["st",local.org, local.prj, local.env]
+  prefixes = ["st",local.org, local.env]
 }
 
 module "shell_storage_account_name" {
   source   = "gsoft-inc/naming/azurerm//modules/storage/storage_account"
   name     = "shell"
-  prefixes = [local.org, local.prj, local.env]
+  prefixes = ["st",local.org, local.env]
   suffixes = [random_string.suffix.result]
 }
