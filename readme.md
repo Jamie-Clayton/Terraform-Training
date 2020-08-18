@@ -239,12 +239,17 @@ The following example is a basic set of .net components that would be required f
 * Navigate to Terminal -> New Terminal -> Terminal Tab
 * Enter the following command one at a time.
 
-```powershell
+```PowerShell
 # Web browser will open and navigate through the Azure Portal authentication process
 az login
 
 # You can then view all the azure subscriptions you user/password combo can access.
 az account list
+
+# Recommendation: Create a service Principle with contributor access to the Subscription or Resource Group for Terraform/Octopus Deploy use.
+# https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell
+$subscription = "<subscription_id>"
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$($subscription)" --name="http://service.principle.subscription"
 
 # Replace SUBSCRIPTION_ID in the powershell bellow, with the GUID from the previous step.
 az account set -s SUBSCRIPTION_ID
