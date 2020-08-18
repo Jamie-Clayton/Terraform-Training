@@ -279,147 +279,6 @@ terraform import azurerm_servicebus_namespace.queue /subscriptions/SUBSCRIPTION_
 terraform import azurerm_storage_account.storage /subscriptions/SUBSCRIPTION_ID/resourceGroups/develop-rg/providers/Microsoft.Storage/storageAccounts/developstorage
 ```
 
-### File Example - main.tf
-
-\>= 0.12
-
-```terraform
-# Configure the Azure Provider
-provider "azurerm" {
-  version = "=1.28.0"
-  subscription_id = var.azSubscriptionId
-  tenant_id       = var.azTenantId
-}
-
-# Resource Group to store all the related objects.
-resource "azurerm_resource_group" "envgrp" {  
-  name      = join("-", [var.Env, "rg"] )
-  location  = var.azLocation
-  tags      = var.azDefaultDevTags
-}
-
-# Queue services for Producer/Consumer software pattern.
-resource "azurerm_servicebus_namespace" "queue" {
-  name                = join("-", [ var.Env, "sbus" ] )
-  resource_group_name = azurerm_resource_group.envgrp.name
-  location            = azurerm_resource_group.envgrp.location
-  sku                 = "Standard"
-  tags                = var.azDefaultDevTags
-}
-
-resource "azurerm_servicebus_namespace_authorization_rule" "queuesecurity" {
-  name                = "RootManageSharedAccessKey"
-  namespace_name      = azurerm_servicebus_namespace.queue.name
-  resource_group_name = azurerm_resource_group.envgrp.name
-
-  listen = true
-  send   = true
-  manage = true
-}
-
-# Storage account (LowerCaseOnly)
-resource "azurerm_storage_account" "storage" {
-  name                     = lower(join( var.Env, "storage" ))
-  resource_group_name      = azurerm_resource_group.envgrp.name
-  location                 = azurerm_resource_group.envgrp.location
-  access_tier              = "Hot"
-  account_kind             = "StorageV2"
-  account_tier             = "Standard"
-  account_replication_type = "RAGRS"
-  enable_https_traffic_only = true
-  tags                     = var.azDefaultDevTags
-}
-
-# Create Storage and share for portal.azure.com Shell commands (Powershell/Bash)
-resource "azurerm_storage_account" "shellstorage" {
-  name                     = lower(join( "shell", "storage" ))
-  resource_group_name      = azurerm_resource_group.envgrp.name
-  location                 = "Southeast Asia"
-  access_tier              = "Hot"
-  account_kind             = "StorageV2"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  enable_https_traffic_only = true
-  tags                     = merge({ ms-resource-usage = "azure-cloud-shell" }, var.azDefaultDevTags)
-}
-
-# Exposing a share required for portal.azure.com Shell commands (Powershell/Bash)
-# TODO - Unsure of the security implications of this
-resource "azurerm_storage_share" "shellShare" {
-  name                 = "powershell"
-  storage_account_name = azurerm_storage_account.shellstorage.name
-  resource_group_name  = azurerm_resource_group.envgrp.name
-  quota                = 2
-}
-```
-
-### File Example - variables.tf
-
-\>= 0.12
-
-```terraform
-# Replace 00000000-00000-0000-0000-000000000000 with actual values
-variable "azSubscriptionId" {
-    type    = "string"
-    default = "00000000-00000-0000-0000-000000000000"
-}
-
-variable "azTenantId" {
-    type    = "string"
-    default = "00000000-00000-0000-0000-000000000000"
-}
-
-variable "Env" {
-    type    = "string"
-    default = "develop"
-}
-
-variable "azLocation" {
-    type = "string"
-    default = "australiasoutheast"
-}
-
-variable "azDefaultDevTags" {
-    type    = map(any)
-    default = {
-        Application-type    = "Microsoft Dot Net"
-        Commercials         = "TBA"
-        CostCenter          = "CustomerAccNumber=TBA"
-        Documentation       = "https://github.com/JenasysDesign/Terraform-Training"
-        Environment         = "dev",
-        Kanban              = "https://github.com/JenasysDesign/Terraform-Training/projects"
-        Management          = "Terraform.azurerm",
-        Solution            = "Cloud Microservices Template"
-        Support             = "https://github.com/JenasysDesign/Terraform-Training/issues"
-        Repository          = "https://github.com/JenasysDesign/Terraform-Training"
-    }
-}
-```
-
-### File Example - Output.tf
-
-```Terraform
-output "StorageKey" {
-    value = azurerm_storage_account.storage.primary_access_key
-}
-
-output "StorageName" {
-    value = azurerm_storage_account.storage.name
-}
-
-output "ServiceBusConnectionString" {
-    value = azurerm_servicebus_namespace_authorization_rule.queuesecurity.primary_connection_string
-}
-
-output "FileShare-Shell" {
-    value = azurerm_storage_share.shellShare.url
-}
-```
-
-## 5. Walk-through - Aws
-
-TBA
-
 ## 6. Terraform Object Naming Recommendations
 
 * **Do** Keep your naming pattern consistent.
@@ -429,16 +288,24 @@ TBA
 * **Don't** use acronyms, unless they are part of you naming strategy E.g. *WS* should be *WebServer*
 * **Do** use tags to provide more context for the objects.
 
-### Naming Examples with Terraform Variables
+## 7. Suggested modules to create
 
-A windows IIS Web Server: *SupplyChain-Orders-UAT-WebServer*
+Based on initial research, the following objects are required to complete the configuration.
 
-```Terraform
-    var.Service = "SupplyChain"
-    var.Component = "Orders"
-    var.Environment = "UAT"
-    var.ObjectName = "{var.Service}-{var.Component}-{var.Environment}-WebServer" 
-```
+1. Service Fabric
+2. SQL Database
+3. Auto scaling group
+4. Vault secrets
+5. Virtual Machines (Including scale set)
+6. Virtual network
+7. Network Appliance
+8. Public IP Addresses
+9. Load Balancer
+10. DNS Entries
+11. Application security. (Graph API specific) - Application specific
+12. Signlr
+13. Bastion Server
+14. Log/Monitoring service.  
 
 ## 8. Conclusion
 
