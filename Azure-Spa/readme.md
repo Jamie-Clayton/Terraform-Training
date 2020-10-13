@@ -2,4 +2,10 @@
 
 ## References
 
-[Azure - Az SPA](https://github.com/SlOrbA/ng-az-tf-example)
+[Terraform - Azure storage](https://www.terraform.io/docs/providers/azurerm/r/storage_account.html)
+
+[Terraform - Modules](https://www.terraform.io/docs/configuration/modules.html)
+
+[Terraform - Locals](https://www.terraform.io/docs/configuration/locals.html)
+
+[Terraform - Variables](https://www.terraform.io/docs/configuration/variables.html)
