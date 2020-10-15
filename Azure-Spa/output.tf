@@ -1,0 +1,1 @@
+output "url" { value = "https://${azurerm_cdn_endpoint.cdnEndpoint.name}.azureedge.net" }
