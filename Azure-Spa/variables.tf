@@ -32,7 +32,7 @@ variable azDefaultTags {
 }
 
 resource "random_string" "suffix" {
-  length  = 13
+  length  = 6
   upper   = false
   special = false
   keepers = {
@@ -42,27 +42,27 @@ resource "random_string" "suffix" {
 
 module "resource_group_name" {
   source   = "gsoft-inc/naming/azurerm//modules/general/resource_group"
-  name     = "main"
-  prefixes = ["rg",local.org, local.prj, local.env]
+  name     = "cdn"
+  prefixes = ["rg",local.prj, local.env]
   suffixes = [random_string.suffix.result]
 }
 
 module "storage_account_name" {
   source   = "gsoft-inc/naming/azurerm//modules/storage/storage_account"
-  name     = "data"
-  prefixes = ["store",local.org, local.env]
+  name     = "cdn"
+  prefixes = [local.prj, local.env]
 }
 
 module "cdn_profile_name" {
-  source   = "gsoft-inc/naming/azurerm//modules/general/resource_group"
-  name     = "main"
-  prefixes = ["cdn",local.org, local.prj, local.env]
+  source   = "gsoft-inc/naming/azurerm//modules/storage/file_share_name"
+  name     = "cdn"
+  prefixes = [local.prj, local.env]
   suffixes = [random_string.suffix.result]
 }
 
 module "cdn_endpoint_name" {
   source   = "gsoft-inc/naming/azurerm//modules/general/resource_group"
-  name     = "main"
-  prefixes = ["cdn-endpoint",local.org, local.prj, local.env]
+  name     = "cdn"
+  prefixes = [local.prj, local.env]
   suffixes = [random_string.suffix.result]
 }
